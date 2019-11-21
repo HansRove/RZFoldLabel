@@ -1,0 +1,8 @@
+Pods
+*.lock
+*.xcworkspacedata
+*.xcuserstate
+*.xcuserdatad/
+UserInterfaceState.xcuserstate
+project.xcworkspace/
+*.xcworkspace/
