@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NSAttributedString+RZColorful.h"
+#import <NSAttributedString+RZColorful.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,18 +40,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, getter = isFold) BOOL fold;
 
-/** 折叠状态时，尾部追加的显示的内容 （点击将会展开）
+/** 折叠状态时，尾部追加的显示的内容 （点击将会展开）如"显示全文"
     富文本，可以显示图文混排，
     备注：请给文字和图片都要增加   [.tapAction(actionName)]   图片和文字的actionName请勿一致，否则会有系统级bug导致崩溃
     要切换 展开、收起 在 [ rzDidTapLabel]中，设置fold = !fold;
  */
-@property (nonatomic, copy) NSAttributedString *foldAttributedString;
-/** 全部显示时，尾部追加的内容 （点击将会收起）
+@property (nonatomic, copy) NSAttributedString *showAllText;
+/** 全部显示时，尾部追加的内容 （点击将会收起） 如“收起”
     富文本，可以显示图文混排，
     备注：请给文字和图片都要增加   [.tapAction(actionName)]   图片和文字的actionName请勿一致，否则会有系统级bug导致崩溃
     要切换 展开、收起 在 [ rzDidTapLabel]中，设置fold = !fold;
  */
-@property (nonatomic, copy) NSAttributedString *normalAttributedString;
+@property (nonatomic, copy) NSAttributedString *foldText;
 
 /** 点击label里的可以点击的字符串时，将会响应
     (给attributedString  或 foldAttributedString 或 normalAttributedString 字符串或图片设置了tapAction()或html中包含 [<a herf='xxx'> </a> ]将会回调此方法)

@@ -9,6 +9,7 @@
 #import "RZFoldLabel.h"
 #import "UITextView+RZColorful.h"
 #import "NSString+RZCode.h"
+#import <Masonry/Masonry.h>
 
 @interface RZFoldLabel ()
 
@@ -85,63 +86,50 @@
 - (void)setTextInsetEdge:(UIEdgeInsets)textInsetEdge {
     _textInsetEdge = textInsetEdge;
     
-    if (self.edgeLayouts) {
-        [self removeConstraints:self.edgeLayouts];
-    }
-    // 上
-    NSLayoutConstraint *top = [NSLayoutConstraint
-                               constraintWithItem:self.textView
-                               attribute:NSLayoutAttributeTop
-                               relatedBy:NSLayoutRelationGreaterThanOrEqual
-                               toItem:self
-                               attribute:NSLayoutAttributeTop
-                               multiplier:1.0
-                               constant:textInsetEdge.top];
-    // 左
-    NSLayoutConstraint *left = [NSLayoutConstraint
-                                constraintWithItem:self.textView
-                                attribute:NSLayoutAttributeLeft
-                                relatedBy:NSLayoutRelationEqual
-                                toItem:self
-                                attribute:NSLayoutAttributeLeft
-                                multiplier:1.0
-                                constant:textInsetEdge.left];
-    // 右
-    NSLayoutConstraint *right = [NSLayoutConstraint
-                                 constraintWithItem:self.textView
-                                 attribute:NSLayoutAttributeRight
-                                 relatedBy:NSLayoutRelationEqual
-                                 toItem:self
-                                 attribute:NSLayoutAttributeRight
-                                 multiplier:1.0
-                                 constant:-textInsetEdge.right];
-    // 下
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-                                  constraintWithItem:self.textView
-                                  attribute:NSLayoutAttributeBottom
-                                  relatedBy:NSLayoutRelationLessThanOrEqual
-                                  toItem:self
-                                  attribute:NSLayoutAttributeBottom
-                                  multiplier:1.0
-                                  constant:-textInsetEdge.bottom];
-    NSLayoutConstraint *centerX = [NSLayoutConstraint
-                                   constraintWithItem:self.textView
-                                   attribute:NSLayoutAttributeCenterX
-                                   relatedBy:NSLayoutRelationEqual
-                                   toItem:self
-                                   attribute:NSLayoutAttributeCenterX
-                                   multiplier:1.0
-                                   constant:0];
-    NSLayoutConstraint *centerY = [NSLayoutConstraint
-                                   constraintWithItem:self.textView
-                                   attribute:NSLayoutAttributeCenterY
-                                   relatedBy:NSLayoutRelationEqual
-                                   toItem:self
-                                   attribute:NSLayoutAttributeCenterY
-                                   multiplier:1.0
-                                   constant:0];
-    self.edgeLayouts = @[top, left, bottom, right, centerX, centerY];
-    [self addConstraints: self.edgeLayouts];
+//    if (self.edgeLayouts) {
+//        [self removeConstraints:self.edgeLayouts];
+//    }
+//    // 上
+//    NSLayoutConstraint *top = [NSLayoutConstraint
+//                               constraintWithItem:self.textView
+//                               attribute:NSLayoutAttributeTop
+//                               relatedBy:NSLayoutRelationEqual
+//                               toItem:self
+//                               attribute:NSLayoutAttributeTop
+//                               multiplier:1.0
+//                               constant:textInsetEdge.top];
+//    // 左
+//    NSLayoutConstraint *left = [NSLayoutConstraint
+//                                constraintWithItem:self.textView
+//                                attribute:NSLayoutAttributeLeft
+//                                relatedBy:NSLayoutRelationEqual
+//                                toItem:self
+//                                attribute:NSLayoutAttributeLeft
+//                                multiplier:1.0
+//                                constant:textInsetEdge.left];
+//    // 右
+//    NSLayoutConstraint *right = [NSLayoutConstraint
+//                                 constraintWithItem:self.textView
+//                                 attribute:NSLayoutAttributeRight
+//                                 relatedBy:NSLayoutRelationEqual
+//                                 toItem:self
+//                                 attribute:NSLayoutAttributeRight
+//                                 multiplier:1.0
+//                                 constant:-textInsetEdge.right];
+//    // 下
+//    NSLayoutConstraint *bottom = [NSLayoutConstraint
+//                                  constraintWithItem:self.textView
+//                                  attribute:NSLayoutAttributeBottom
+//                                  relatedBy:NSLayoutRelationEqual
+//                                  toItem:self
+//                                  attribute:NSLayoutAttributeBottom
+//                                  multiplier:1.0
+//                                  constant:-textInsetEdge.bottom];
+//    self.edgeLayouts = @[top, left, bottom, right];
+//    [self addConstraints: self.edgeLayouts];
+    [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self).insets(textInsetEdge);
+    }];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
@@ -155,7 +143,7 @@
 
 - (NSAttributedString *)displayFoldAttr {
     if (!_displayFoldAttr) {
-        _displayFoldAttr = [self.attributedText rz_appendAttributedString:self.foldAttributedString when:self.condtion line:self.numberOfLines inRect:self.textDrawRect];
+        _displayFoldAttr = [self.attributedText rz_appendAttributedString:self.showAllText when:self.condtion line:self.numberOfLines inRect:self.textDrawRect];
     }
     return _displayFoldAttr;
 }
@@ -163,8 +151,8 @@
 - (NSAttributedString *)displayNormalFoldAttr {
     if (!_displayNormalFoldAttr) {
         NSMutableAttributedString *temp = self.attributedText.mutableCopy;
-        if (self.normalAttributedString) {
-            [temp appendAttributedString:self.normalAttributedString];
+        if (self.foldText) {
+            [temp appendAttributedString:self.foldText];
         }
         _displayNormalFoldAttr = temp.copy;
     }

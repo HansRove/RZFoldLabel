@@ -124,13 +124,13 @@
         // 图片 文字的tapAction，在相邻情况下，请勿使用同一个，否则长按会遇到系统的bug导致crash
         
         // 折叠时，追加在最后的文本
-        label.foldAttributedString = [NSAttributedString rz_colorfulConfer:^(RZColorfulConferrer *confer) {
+        label.showAllText = [NSAttributedString rz_colorfulConfer:^(RZColorfulConferrer *confer) {
             confer.text(@"...").font([UIFont systemFontOfSize:16]).textColor(UIColor.blackColor); // 实现点击
             confer.appendImage([UIImage imageNamed:@"showmore"]).size(CGSizeMake(15, 15), RZHorizontalAlignCenter, [UIFont systemFontOfSize:16]).tapAction(@"rz_fold_image");// 实现点击
             confer.text(@"全文").font([UIFont systemFontOfSize:16]).textColor(UIColor.redColor).tapAction(@"rz_fold"); // 实现点击
         }];
         // 展开全部时，追加在最后的文本
-        label.normalAttributedString =  [NSAttributedString rz_colorfulConfer:^(RZColorfulConferrer *confer) {
+        label.foldText =  [NSAttributedString rz_colorfulConfer:^(RZColorfulConferrer *confer) {
             confer.paragraphStyle.alignment(NSTextAlignmentRight); // 可以设置文本显示在左、中、右 （在foldType = RZFoldLabelFoldTypeNextRow 时才生效，在Normal时，跟随之前文本的配置来对齐）
             confer.appendImage([UIImage imageNamed:@"fold"]).size(CGSizeMake(15, 15), RZHorizontalAlignCenter, [UIFont systemFontOfSize:16]).tapAction(@"rz_fold_image"); // 实现点击
             confer.text(@"收起").font([UIFont systemFontOfSize:16]).textColor(UIColor.redColor).tapAction(@"rz_fold"); // 实现点击
